@@ -1,0 +1,259 @@
+{
+  "players": [
+    {
+      "_id": "p1",
+      "name": "Rohit Soren",
+      "age": 17,
+      "sport": "Football",
+      "academy": "Dumka Sports Academy",
+      "contact": "+91 98765 43210",
+      "position": "Striker / Forward",
+      "jerseyNumber": "10",
+      "fitnessScore": 92,
+      "coachNotes": "Excellent sprint speed and finishing. Very consistent in practice.",
+      "active": true,
+      "createdAt": "2026-10-01T08:00:00.000Z"
+    },
+    {
+      "_id": "p2",
+      "name": "Ankit Kumar",
+      "age": 16,
+      "sport": "Cricket",
+      "academy": "Dumka Sports Academy",
+      "contact": "+91 98765 43211",
+      "position": "All-Rounder (Right Arm Fast)",
+      "jerseyNumber": "7",
+      "fitnessScore": 88,
+      "coachNotes": "Solid swing bowler, reliable lower-order batsman.",
+      "active": true,
+      "createdAt": "2026-10-02T08:00:00.000Z"
+    },
+    {
+      "_id": "p3",
+      "name": "Sunita Marandi",
+      "age": 15,
+      "sport": "Football",
+      "academy": "Dumka Sports Academy",
+      "contact": "+91 98765 43212",
+      "position": "Midfielder",
+      "jerseyNumber": "8",
+      "fitnessScore": 95,
+      "coachNotes": "High stamina, great passing vision. Ready for district trials.",
+      "active": true,
+      "createdAt": "2026-10-03T08:00:00.000Z"
+    },
+    {
+      "_id": "p4",
+      "name": "Prakash Hembrom",
+      "age": 18,
+      "sport": "Cricket",
+      "academy": "Dumka Sports Academy",
+      "contact": "+91 98765 43213",
+      "position": "Top Order Batsman / WK",
+      "jerseyNumber": "18",
+      "fitnessScore": 78,
+      "coachNotes": "Good stroke play, but skipped 2 recent morning fitness sessions.",
+      "active": true,
+      "createdAt": "2026-10-04T08:00:00.000Z"
+    },
+    {
+      "_id": "p5",
+      "name": "Bablu Murmu",
+      "age": 16,
+      "sport": "Football",
+      "academy": "Dumka Sports Academy",
+      "contact": "+91 98765 43214",
+      "position": "Goalkeeper",
+      "jerseyNumber": "1",
+      "fitnessScore": 85,
+      "coachNotes": "Strong reflexes, good communication with defenders.",
+      "active": true,
+      "createdAt": "2026-10-05T08:00:00.000Z"
+    },
+    {
+      "_id": "p6",
+      "name": "Pooja Kumari",
+      "age": 17,
+      "sport": "Athletics",
+      "academy": "Dumka Sports Academy",
+      "contact": "+91 98765 43215",
+      "position": "100m / 200m Sprint",
+      "jerseyNumber": "12",
+      "fitnessScore": 96,
+      "coachNotes": "State trial candidate. Clocking sub-12.8s in 100m.",
+      "active": true,
+      "createdAt": "2026-10-06T08:00:00.000Z"
+    }
+  ],
+  "sessions": [
+    {
+      "_id": "s1",
+      "date": "2026-10-25",
+      "sport": "Football",
+      "sessionType": "Practice",
+      "academy": "Dumka Sports Academy",
+      "focusArea": "Passing drills & small sided game",
+      "attendance": [
+        {
+          "playerId": "p1",
+          "playerName": "Rohit Soren",
+          "status": "Present",
+          "notes": "Active in drills"
+        },
+        {
+          "playerId": "p3",
+          "playerName": "Sunita Marandi",
+          "status": "Present",
+          "notes": "Exceptional work rate"
+        },
+        {
+          "playerId": "p5",
+          "playerName": "Bablu Murmu",
+          "status": "Present",
+          "notes": "Shot stopping practice"
+        }
+      ],
+      "totalPlayers": 3,
+      "presentCount": 3,
+      "absentCount": 0,
+      "createdAt": "2026-10-25T11:00:00.000Z"
+    },
+    {
+      "_id": "s2",
+      "date": "2026-10-27",
+      "sport": "Football",
+      "sessionType": "Morning Conditioning",
+      "academy": "Dumka Sports Academy",
+      "focusArea": "Sprint intervals & tactical formation",
+      "attendance": [
+        {
+          "playerId": "p1",
+          "playerName": "Rohit Soren",
+          "status": "Present",
+          "notes": "Strong sprint times"
+        },
+        {
+          "playerId": "p3",
+          "playerName": "Sunita Marandi",
+          "status": "Present",
+          "notes": "Full workout completed"
+        },
+        {
+          "playerId": "p5",
+          "playerName": "Bablu Murmu",
+          "status": "Absent",
+          "notes": "Skipped practice (family event)"
+        }
+      ],
+      "totalPlayers": 3,
+      "presentCount": 2,
+      "absentCount": 1,
+      "createdAt": "2026-10-27T07:30:00.000Z"
+    },
+    {
+      "_id": "s3",
+      "date": "2026-10-28",
+      "sport": "Cricket",
+      "sessionType": "Practice",
+      "academy": "Dumka Sports Academy",
+      "focusArea": "Net batting against pace & death over bowling",
+      "attendance": [
+        {
+          "playerId": "p2",
+          "playerName": "Ankit Kumar",
+          "status": "Present",
+          "notes": "Bowled 6 overs with good control"
+        },
+        {
+          "playerId": "p4",
+          "playerName": "Prakash Hembrom",
+          "status": "Absent",
+          "notes": "Skipped practice without intimation"
+        }
+      ],
+      "totalPlayers": 2,
+      "presentCount": 1,
+      "absentCount": 1,
+      "createdAt": "2026-10-28T16:00:00.000Z"
+    }
+  ],
+  "matches": [
+    {
+      "_id": "m1",
+      "date": "2026-10-29",
+      "sport": "Football",
+      "opponent": "Deoghar FC",
+      "location": "Dumka Stadium Ground",
+      "academyScore": "3",
+      "opponentScore": "1",
+      "result": "Won",
+      "academy": "Dumka Sports Academy",
+      "topScorer": "Rohit Soren (2 goals)",
+      "coachNotes": "Great victory. High team pressing worked wonders.",
+      "players": [
+        {
+          "playerId": "p1",
+          "playerName": "Rohit Soren",
+          "played": true,
+          "score": 2,
+          "assistsOrWickets": 1,
+          "performanceRating": 9,
+          "notes": "Clinical finishing on counter-attacks."
+        },
+        {
+          "playerId": "p3",
+          "playerName": "Sunita Marandi",
+          "played": true,
+          "score": 1,
+          "assistsOrWickets": 2,
+          "performanceRating": 9,
+          "notes": "Controlled the midfield tempo."
+        },
+        {
+          "playerId": "p5",
+          "playerName": "Bablu Murmu",
+          "played": true,
+          "score": 0,
+          "assistsOrWickets": 0,
+          "performanceRating": 8,
+          "notes": "Made 4 crucial saves."
+        }
+      ],
+      "createdAt": "2026-10-29T18:00:00.000Z"
+    },
+    {
+      "_id": "m2",
+      "date": "2026-10-30",
+      "sport": "Cricket",
+      "opponent": "Ranchi Colts XI",
+      "location": "Dumka District Oval",
+      "academyScore": "164/5 (20)",
+      "opponentScore": "142/9 (20)",
+      "result": "Won",
+      "academy": "Dumka Sports Academy",
+      "topScorer": "Ankit Kumar (48 runs, 3 wkts)",
+      "coachNotes": "Exciting T20 friendly. Ankit was match winner.",
+      "players": [
+        {
+          "playerId": "p2",
+          "playerName": "Ankit Kumar",
+          "played": true,
+          "score": 48,
+          "assistsOrWickets": 3,
+          "performanceRating": 10,
+          "notes": "Man of the Match. Fast 48 off 24 balls and 3 wickets."
+        },
+        {
+          "playerId": "p4",
+          "playerName": "Prakash Hembrom",
+          "played": true,
+          "score": 18,
+          "assistsOrWickets": 0,
+          "performanceRating": 6,
+          "notes": "Struggled with timing early in the innings."
+        }
+      ],
+      "createdAt": "2026-10-30T17:30:00.000Z"
+    }
+  ]
+}
