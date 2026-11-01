@@ -85,7 +85,14 @@ export default function CoachDesk() {
       fetch('/api/status')
         .then((r) => r.json())
         .then((d) => setDbStatus(d))
-        .catch(() => setDbStatus({ connected: false, type: 'Local Storage' }));
+        .catch((err) =>
+          setDbStatus({
+            connected: false,
+            type: 'Disconnected',
+            error: err.message,
+            suggestion: 'Failed to contact database status endpoint.',
+          })
+        );
 
       const [pRes, sRes, mRes, rRes] = await Promise.all([
         fetch('/api/players'),
@@ -343,24 +350,24 @@ export default function CoachDesk() {
               className={`flex items-center space-x-2 text-xs px-3 py-1.5 rounded-lg border shadow-sm ${
                 dbStatus.connected
                   ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300'
-                  : 'border-amber-500/30 bg-amber-500/10 text-amber-300'
+                  : 'border-red-500/40 bg-red-500/10 text-red-300'
               }`}
               title={
                 dbStatus.connected
-                  ? `Database: ${dbStatus.database} | matches collection: ${
+                  ? `Database: ${dbStatus.database} | matches: ${
                       dbStatus.matchesAccessible ? 'Accessible' : 'Unavailable'
                     }`
-                  : 'Running in local fallback mode'
+                  : dbStatus.suggestion || 'Database connection error'
               }
             >
               <span
                 className={`w-2.5 h-2.5 rounded-full ${
-                  dbStatus.connected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+                  dbStatus.connected ? 'bg-emerald-400 animate-pulse' : 'bg-red-400'
                 }`}
               />
               <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-1.5 leading-tight">
                 <span className="font-bold">
-                  {dbStatus.connected ? 'MongoDB Atlas Connected' : 'Local Storage'}
+                  {dbStatus.connected ? 'MongoDB Atlas Connected' : 'Database Offline'}
                 </span>
                 {dbStatus.connected && (
                   <span className="text-[10px] text-emerald-400/90 font-mono">
@@ -465,6 +472,15 @@ export default function CoachDesk() {
 
       {/* Main Content Area */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {!dbStatus.connected && dbStatus.suggestion && (
+          <div className="mb-6 bg-red-950/40 border border-red-500/50 rounded-2xl p-4 flex items-start space-x-3 text-xs text-red-200 shadow-lg">
+            <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <div className="font-bold text-red-300 text-sm">MongoDB Atlas Connection Alert</div>
+              <p className="text-red-200/90 leading-relaxed">{dbStatus.suggestion}</p>
+            </div>
+          </div>
+        )}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-24 space-y-3">
             <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>

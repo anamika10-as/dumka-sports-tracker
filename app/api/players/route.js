@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { getPlayers, addPlayer } from '../../../lib/storage.js';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -8,7 +11,10 @@ export async function GET(request) {
     const players = await getPlayers(sport);
     return NextResponse.json({ success: true, data: players });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }
 
@@ -24,6 +30,9 @@ export async function POST(request) {
     const created = await addPlayer(body);
     return NextResponse.json({ success: true, data: created }, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }

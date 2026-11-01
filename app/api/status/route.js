@@ -1,58 +1,82 @@
 import { NextResponse } from 'next/server';
+import mongoose from 'mongoose';
 import { connectDB } from '../../../lib/db.js';
+import Player from '../../../models/Player.js';
+import Session from '../../../models/Session.js';
+import Match from '../../../models/Match.js';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET() {
   try {
     const isDB = await connectDB();
-    if (isDB && isDB.connection.readyState === 1) {
-      const db = isDB.connection.db;
+    if (isDB && mongoose.connection.readyState === 1) {
+      const db = mongoose.connection.db;
       const databaseName = db.databaseName;
-      
-      // Verify matches collection accessibility
-      let matchesAccessible = false;
-      let matchesCount = 0;
-      try {
-        const collections = await db.listCollections().toArray();
-        const hasMatches = collections.some((c) => c.name === 'matches');
-        if (hasMatches) {
-          matchesAccessible = true;
-          matchesCount = await db.collection('matches').countDocuments();
-        } else {
-          // If not yet created, create collection and verify accessibility
-          await db.createCollection('matches');
-          matchesAccessible = true;
-          matchesCount = await db.collection('matches').countDocuments();
-        }
-      } catch (collErr) {
-        matchesAccessible = false;
-      }
+
+      // Real counts from MongoDB Atlas
+      const [playerCount, sessionCount, matchCount] = await Promise.all([
+        Player.countDocuments({ active: true }),
+        Session.countDocuments(),
+        Match.countDocuments(),
+      ]);
 
       return NextResponse.json({
         connected: true,
         type: 'MongoDB Atlas',
         database: databaseName,
-        matchesAccessible,
-        matchesCount,
-        statusText: `Connected to ${databaseName} • matches (${matchesCount})`,
+        matchesAccessible: true,
+        counts: {
+          players: playerCount,
+          sessions: sessionCount,
+          matches: matchCount,
+        },
+        statusText: `Connected to ${databaseName} (${playerCount} players, ${sessionCount} sessions, ${matchCount} matches)`,
       });
     }
 
-    return NextResponse.json({
-      connected: false,
-      type: 'Local Storage',
-      database: 'Local File Store',
-      matchesAccessible: false,
-      matchesCount: 0,
-      statusText: 'Local Fallback Storage Active',
-    });
+    return NextResponse.json(
+      {
+        connected: false,
+        type: 'Disconnected',
+        error: 'MongoDB Atlas connection readyState is not 1',
+      },
+      { status: 503 }
+    );
   } catch (error) {
-    return NextResponse.json({
-      connected: false,
-      type: 'Disconnected',
-      database: 'None',
-      matchesAccessible: false,
-      matchesCount: 0,
-      statusText: 'Connection Failed',
-    });
+    let reason = 'CONNECTION_FAILED';
+    let suggestion = error.message;
+
+    if (!process.env.MONGODB_URI) {
+      reason = 'ENV_MISSING';
+      suggestion =
+        'MONGODB_URI is not set in Vercel Environment Variables. Add MONGODB_URI in Vercel Project Settings > Environment Variables, then Redeploy.';
+    } else if (
+      error.message?.includes('whitelist') ||
+      error.message?.includes('Could not connect to any servers')
+    ) {
+      reason = 'IP_NOT_WHITELISTED';
+      suggestion =
+        'Vercel IP blocked by MongoDB Atlas. In Atlas Network Access, add IP 0.0.0.0/0 (Allow access from anywhere).';
+    } else if (
+      error.message?.includes('auth') ||
+      error.message?.includes('Authentication failed')
+    ) {
+      reason = 'AUTH_FAILED';
+      suggestion =
+        'MongoDB Atlas authentication failed. Verify database user password in MONGODB_URI.';
+    }
+
+    return NextResponse.json(
+      {
+        connected: false,
+        type: 'Disconnected',
+        error: error.message,
+        reason,
+        suggestion,
+      },
+      { status: 500 }
+    );
   }
 }
