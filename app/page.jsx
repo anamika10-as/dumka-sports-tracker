@@ -340,23 +340,34 @@ export default function CoachDesk() {
 
           <div className="flex items-center space-x-3">
             <div
-              className={`hidden sm:flex items-center space-x-1.5 text-xs px-2.5 py-1.5 rounded-lg border ${
+              className={`flex items-center space-x-2 text-xs px-3 py-1.5 rounded-lg border shadow-sm ${
                 dbStatus.connected
-                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                  ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300'
                   : 'border-amber-500/30 bg-amber-500/10 text-amber-300'
               }`}
               title={
                 dbStatus.connected
-                  ? 'Connected to MongoDB Atlas cloud database'
-                  : 'Using local store. To connect Atlas, check username & password in .env.local'
+                  ? `Database: ${dbStatus.database} | matches collection: ${
+                      dbStatus.matchesAccessible ? 'Accessible' : 'Unavailable'
+                    }`
+                  : 'Running in local fallback mode'
               }
             >
               <span
-                className={`w-2 h-2 rounded-full ${
+                className={`w-2.5 h-2.5 rounded-full ${
                   dbStatus.connected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
                 }`}
               />
-              <span className="font-semibold">{dbStatus.type}</span>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-1.5 leading-tight">
+                <span className="font-bold">
+                  {dbStatus.connected ? 'MongoDB Atlas Connected' : 'Local Storage'}
+                </span>
+                {dbStatus.connected && (
+                  <span className="text-[10px] text-emerald-400/90 font-mono">
+                    ({dbStatus.database} • matches: {dbStatus.matchesAccessible ? '✓' : '✗'})
+                  </span>
+                )}
+              </div>
             </div>
             <button
               onClick={() => {
