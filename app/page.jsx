@@ -38,6 +38,7 @@ export default function CoachDesk() {
   const [readinessData, setReadinessData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [dbStatus, setDbStatus] = useState({ connected: false, type: 'Checking...' });
 
   // Modals
   const [showAddPlayerModal, setShowAddPlayerModal] = useState(false);
@@ -81,6 +82,11 @@ export default function CoachDesk() {
   const fetchData = async () => {
     setLoading(true);
     try {
+      fetch('/api/status')
+        .then((r) => r.json())
+        .then((d) => setDbStatus(d))
+        .catch(() => setDbStatus({ connected: false, type: 'Local Storage' }));
+
       const [pRes, sRes, mRes, rRes] = await Promise.all([
         fetch('/api/players'),
         fetch('/api/sessions'),
@@ -333,6 +339,25 @@ export default function CoachDesk() {
           </div>
 
           <div className="flex items-center space-x-3">
+            <div
+              className={`hidden sm:flex items-center space-x-1.5 text-xs px-2.5 py-1.5 rounded-lg border ${
+                dbStatus.connected
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                  : 'border-amber-500/30 bg-amber-500/10 text-amber-300'
+              }`}
+              title={
+                dbStatus.connected
+                  ? 'Connected to MongoDB Atlas cloud database'
+                  : 'Using local store. To connect Atlas, check username & password in .env.local'
+              }
+            >
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  dbStatus.connected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'
+                }`}
+              />
+              <span className="font-semibold">{dbStatus.type}</span>
+            </div>
             <button
               onClick={() => {
                 fetch('/api/seed', { method: 'POST' }).then(() => fetchData());
